@@ -71,8 +71,8 @@ You can pass a array of variables to be replaced as the second parameter:
 
 parameters.yml:
 
-    twig.path:
-        - %basepath%/app/views,
+    twig_path:
+        - %basepath%/app/views
         - %basepath%/vendor/example/views
 
 index.php:
