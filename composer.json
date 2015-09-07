@@ -18,7 +18,7 @@
         "symfony/yaml": "~2.4"
     },
     "autoload": {
-        "psr-0": { "DerAlex\\Silex": "src" }
+        "psr-0": { "DerAlex\\Pimple": "src" }
     },
     "extra": {
         "branch-alias": {
