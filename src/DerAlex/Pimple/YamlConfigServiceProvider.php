@@ -23,7 +23,7 @@
  ******************************************************************************/
 namespace DerAlex\Pimple;
 
-use Pimple\Application;
+use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Symfony\Component\Yaml\Yaml;
 
