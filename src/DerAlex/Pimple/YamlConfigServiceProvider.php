@@ -21,10 +21,10 @@
  * FROM,  OUT OF  OR IN CONNECTION  WITH THE  SOFTWARE  OR THE  USE OR  OTHER *
  * DEALINGS IN THE SOFTWARE.                                                  *
  ******************************************************************************/
-namespace DerAlex\Silex;
+namespace DerAlex\Pimple;
 
-use Silex\Application;
-use Silex\ServiceProviderInterface;
+use Pimple\Application;
+use Pimple\ServiceProviderInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlConfigServiceProvider implements ServiceProviderInterface
@@ -43,15 +43,15 @@ class YamlConfigServiceProvider implements ServiceProviderInterface
         }
     }
 
-    public function register(Application $app)
+    public function register(Container $pimple)
     {
         $config = Yaml::parse(file_get_contents($this->file));
 
         if (is_array($config)) {
-            $this->importSearch($config, $app);
+            $this->importSearch($config, $pimple);
 
-            if (isset($app['config']) && is_array($app['config'])) {
-                $config = array_replace_recursive($app['config'], $config);
+            if (isset($pimple['config']) && is_array($pimple['config'])) {
+                $config = array_replace_recursive($pimple['config'], $config);
             }
 
             if ($this->variables) {
@@ -60,18 +60,18 @@ class YamlConfigServiceProvider implements ServiceProviderInterface
                 }
             }
 
-            $app['config'] = $config;
+            $pimple['config'] = $config;
         }
     }
 
-    public function importSearch(&$config, $app)
+    public function importSearch(&$config, $pimple)
     {
         foreach ($config as $key => $value) {
             if ($key == 'imports') {
                 foreach ($value as $resource) {
                     $base_dir = str_replace(basename($this->file), '', $this->file);
                     $new_config = new YamlConfigServiceProvider($base_dir . $resource['resource']);
-                    $new_config->register($app);
+                    $new_config->register($pimple);
                 }
                 unset($config['imports']);
             }
@@ -95,7 +95,7 @@ class YamlConfigServiceProvider implements ServiceProviderInterface
         return $value;
     }
 
-    public function boot(Application $app)
+    public function boot(Application $pimple)
     {
     }
 
